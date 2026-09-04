@@ -1,0 +1,1 @@
+"""Invoice verification desktop application."""

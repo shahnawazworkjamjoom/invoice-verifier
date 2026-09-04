@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+.venv/
+data/downloads/
+data/ocr_cache/
+reports/*.csv
+reports/*.xlsx
