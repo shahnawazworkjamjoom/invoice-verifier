@@ -28,6 +28,7 @@ class FakeResponse:
             "invoice_number": "INV-1", "order_number": "PO-1",
             "invoice_date": "2026-09-02", "currency": "AED", "net_amount": 100,
             "vat_amount": 5, "final_amount_due": 105, "vat_rate_percent": 5,
+            "total_quantity": 10,
             "checks": {
                 "invoice_number": {"expected": "INV-1", "found": "INV-1",
                                    "match": True, "evidence": "invoice header"}
@@ -61,10 +62,9 @@ class NvidiaVisionTests(unittest.TestCase):
             self.assertEqual(first, second)
             self.assertEqual(2, post.call_count)
             prompt = post.call_args.kwargs["json"]["messages"][1]["content"][0]["text"]
-            self.assertIn('\"invoice_number\": \"INV-1\"', prompt)
+            self.assertIn('\"order_number\": \"PO-1\"', prompt)
             self.assertIn('\"finance_amount_to_pay\": 105.0', prompt)
-            self.assertIn("AED", prompt)
-            self.assertIn("Return exactly these keys", prompt)
+            self.assertIn("Return exactly this JSON structure", prompt)
 
     def test_pdf_sends_only_first_and_last_pages(self):
         with TemporaryDirectory() as folder:
@@ -101,6 +101,8 @@ class NvidiaVisionTests(unittest.TestCase):
 * **Invoice Date:** 2026-09-02
 * **Currency:** AED
 * **VAT Rate:** 5%
+* **Total Quantity:** 10
+* **Total Net Amount:** 100.00
 * **Subtotal:** 100.00
 * **Total Amount:** 105.00
 
@@ -117,9 +119,9 @@ class NvidiaVisionTests(unittest.TestCase):
         expected = vision._excel_context(self.record())
         result = vision._validate(vision._plain_text_result(response, expected))
         self.assertEqual("APPROVE", result["decision"])
-        self.assertEqual("INV-1", result["invoice_number"])
+        self.assertEqual("PO-1", result["order_number"])
         self.assertEqual(105.0, result["total_amount"])
-        self.assertTrue(result["checks"]["invoice_number"]["match"])
+        self.assertTrue(result["checks"]["order_number"]["match"])
 
     def test_incomplete_placeholder_response_retries_with_last_page(self):
         placeholder = {
@@ -128,6 +130,7 @@ class NvidiaVisionTests(unittest.TestCase):
             "order_number": None, "invoice_date": None, "currency": None,
             "net_amount": None, "vat_amount": None, "vat_rate_percent": None,
             "final_amount_due": None, "corrected_amount_to_pay": None,
+            "total_quantity": None,
             "checks": {},
         }
         complete = FakeResponse().answer or {
@@ -136,7 +139,7 @@ class NvidiaVisionTests(unittest.TestCase):
             "invoice_number": "INV-1", "order_number": "PO-1",
             "invoice_date": "2026-09-02", "currency": "AED", "net_amount": 100,
             "vat_amount": 5, "vat_rate_percent": 5, "final_amount_due": 105,
-            "corrected_amount_to_pay": None,
+            "corrected_amount_to_pay": None, "total_quantity": 10,
             "checks": {},
         }
         with TemporaryDirectory() as folder:
@@ -166,7 +169,7 @@ class NvidiaVisionTests(unittest.TestCase):
             "invoice_number": "INV-1", "order_number": "PO-1",
             "invoice_date": "2026-09-02", "currency": "AED", "net_amount": 100,
             "vat_amount": 5, "final_amount_due": 105, "vat_rate_percent": 5,
-            "checks": {},
+            "total_quantity": 10, "checks": {},
         }
         with TemporaryDirectory() as folder:
             image_path = Path(folder) / "invoice.png"

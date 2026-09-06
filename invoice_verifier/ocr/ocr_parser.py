@@ -141,6 +141,17 @@ def extract_doc_number(text, doc_type='lpo'):
     return val[:64]
 
 
+def extract_order_number(text):
+    """Extract the buyer's PO/reference, not the vendor's sales-order number."""
+    value = _find_first([
+        r'Customer[ \t]*reference[ \t]*[:#\.\-]?[ \t]*(?:\r?\n[ \t]*)?([A-Z0-9][A-Z0-9\-/]{4,40})',
+        r'(?:Purchase[ \t]*Order|LPO|PO)[ \t]*(?:No\.?|Number|#)?[ \t]*[:#\.\-]?[ \t]*(?:\r?\n[ \t]*)?([A-Z0-9][A-Z0-9\-/]{4,40})',
+        r'\b(PO[0-9]{5,}(?:-[0-9]{3,})?)\b',
+        r'Sales[ \t]*order[ \t]*[:#\.\-]?[ \t]*(?:\r?\n[ \t]*)?([A-Z0-9][A-Z0-9\-/]{4,40})',
+    ], text)
+    return re.sub(r'^[:\-\s#]+', '', value).strip()[:64]
+
+
 def extract_date(text, doc_type='lpo'):
     labels = (r'(?:Order[ \t]*Date|PO[ \t]*Date)',) if doc_type == 'lpo' else (
         r'(?:Tax[ \t]*Inv[o0]ice[ \t]*Date|Date[ \t]*of[ \t]*Inv[o0]ice|Inv[o0]ice[ \t]*Date)', r'(?m)^Date')
@@ -701,6 +712,7 @@ def parse_document_text(text, doc_type='lpo'):
     return {
         'vendor_name': extract_vendor(text, doc_type),
         'doc_number': extract_doc_number(text, doc_type),
+        'order_number': extract_order_number(text),
         'doc_date': extract_date(text, doc_type),
         'lines': lines,
         'amount_untaxed': totals['amount_untaxed'],

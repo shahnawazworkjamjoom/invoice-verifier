@@ -13,7 +13,6 @@ from .downloader import InvoiceDownloader
 from .branding import LOGO_PNG_BASE64
 from .corrections import export_decision_workbook
 from .models import InvoiceRecord, VerificationResult
-from .nvidia_vision import is_configured as vision_is_configured
 from .verifier import failed_result, verify_file
 from .workbook import read_records
 
@@ -137,9 +136,9 @@ class InvoiceVerifierApp(tk.Tk):
                 record.invoice_number, amount, "PENDING", "Not processed"))
         self.file_label.configure(text=str(self.workbook_path))
         self.progress.configure(value=0, maximum=max(len(records), 1))
-        reader = "NVIDIA Vision ready" if vision_is_configured() else "NVIDIA Vision API key missing"
         self.status_label.configure(
-            text=f"Loaded {len(records)} invoice records. {reader}. Source workbook will not be changed.")
+            text=(f"Loaded {len(records)} invoice records. Local OCR ready; NVIDIA Vision on hold. "
+                  "Source workbook will not be changed."))
         self._set_ready_state()
         self._update_summary()
 
@@ -155,12 +154,6 @@ class InvoiceVerifierApp(tk.Tk):
 
     def _start(self, records: list[InvoiceRecord]):
         if self.worker and self.worker.is_alive():
-            return
-        if not vision_is_configured():
-            messagebox.showerror(
-                "NVIDIA Vision not configured",
-                "Set a fresh NVIDIA_API_KEY environment variable and restart the application. "
-                "Local OCR is retained in the project but is disabled for verification.")
             return
         self.stop_event.clear()
         self.progress.configure(value=0, maximum=max(len(records), 1))
@@ -204,8 +197,6 @@ class InvoiceVerifierApp(tk.Tk):
                     self.results[result.record.excel_row] = result
                     iid = str(result.record.excel_row)
                     values = list(self.tree.item(iid, "values"))
-                    if result.corrected_amount_to_pay is not None:
-                        values[5] = f"{result.corrected_amount_to_pay:,.2f} {result.record.currency}"
                     values[6], values[7] = result.decision, result.remarks
                     self.tree.item(iid, values=values, tags=(result.decision,))
                     self.progress.configure(value=index, maximum=total)
@@ -282,7 +273,7 @@ class InvoiceVerifierApp(tk.Tk):
             return
         self.status_label.configure(text=f"Result workbook saved: {path}")
         messagebox.showinfo("Result saved",
-                            f"Saved {count} decision(s) and any corrected final payable amounts "
+                            f"Saved {count} decision(s). Finance Amount To Pay is unchanged "
                             f"in the original Excel structure.\n\n{path}")
 
     def _sort(self, column: str, reverse: bool):

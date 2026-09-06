@@ -7,8 +7,8 @@ from invoice_verifier.models import InvoiceRecord
 from invoice_verifier.verifier import verify_file
 
 
-class OcrDisabledTests(unittest.TestCase):
-    def test_local_ocr_code_is_retained_but_not_called(self):
+class OcrActiveTests(unittest.TestCase):
+    def test_local_ocr_is_the_active_verification_path(self):
         record = InvoiceRecord(
             excel_row=2, supplier="BARAKAT", brand="", location="",
             order_number="PO-1", invoice_number="INV-1", currency="AED",
@@ -16,18 +16,19 @@ class OcrDisabledTests(unittest.TestCase):
             unique_reference="test", record_id="1", payment_status="FULL",
             amount_to_pay=105, received_qty=None, tax_code="5%",
         )
-        model_result = {
-            "decision": "APPROVE", "decision_reasons": ["Match"], "checks": {}
+        extracted = {
+            "order_number": "PO-1", "amount_total": 105,
+            "raw_text": "Customer reference PO-1",
+            "ocr_method": "rapidocr", "ocr_confidence": 0.95,
         }
         with TemporaryDirectory() as folder:
             source = Path(folder) / "invoice.pdf"
             source.write_bytes(b"placeholder")
-            with patch("invoice_verifier.ocr.extract_document") as ocr, \
-                    patch("invoice_verifier.verifier.vision_is_configured", return_value=True), \
-                    patch("invoice_verifier.verifier.extract_invoice_json", return_value=model_result):
+            with patch("invoice_verifier.verifier.extract_document", return_value=extracted) as ocr:
                 result = verify_file(record, source)
         self.assertEqual("APPROVE", result.decision)
-        ocr.assert_not_called()
+        self.assertIn("NVIDIA Vision on hold", result.checks["Local OCR"])
+        ocr.assert_called_once()
 
 
 if __name__ == "__main__":

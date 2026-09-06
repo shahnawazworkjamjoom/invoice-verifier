@@ -65,7 +65,7 @@ def _target_columns(source: Path) -> tuple[str, str]:
 
 def export_decision_workbook(source: str | Path, destination: str | Path,
                              results: dict[int, VerificationResult]) -> int:
-    """Copy the XLSX and change approval plus corrected existing amount cells only."""
+    """Copy the XLSX and change only existing approval cells; preserve every amount."""
     source, destination = Path(source), Path(destination)
     if source.resolve() == destination.resolve():
         raise ValueError("Choose a new filename; the uploaded workbook cannot be overwritten.")
@@ -106,29 +106,6 @@ def export_decision_workbook(source: str | Path, destination: str | Path,
                 sheet_xml, count = normal.subn(replace_cell, sheet_xml, count=1)
             if count != 1:
                 raise ValueError(f"Could not update existing approval cell {reference}.")
-
-            if result.corrected_amount_to_pay is not None and decision == "APPROVE":
-                amount_reference = f"{amount_column}{excel_row}"
-                amount_self_closing = re.compile(
-                    rf'<c\b(?P<attrs>[^>]*\br="{re.escape(amount_reference)}"[^>]*)\s*/>', re.S)
-                amount_normal = re.compile(
-                    rf'<c\b(?P<attrs>[^>]*\br="{re.escape(amount_reference)}"[^>]*)>'
-                    rf'.*?</c>', re.S)
-
-                def replace_amount(match):
-                    attrs = match.group("attrs").rstrip().removesuffix("/").rstrip()
-                    attrs = re.sub(r'\s+t="[^"]*"', "", attrs)
-                    value = f"{result.corrected_amount_to_pay:.2f}"
-                    return f"<c{attrs}><v>{value}</v></c>"
-
-                sheet_xml, amount_count = amount_self_closing.subn(
-                    replace_amount, sheet_xml, count=1)
-                if amount_count == 0:
-                    sheet_xml, amount_count = amount_normal.subn(
-                        replace_amount, sheet_xml, count=1)
-                if amount_count != 1:
-                    raise ValueError(
-                        f"Could not update existing Finance Amount To Pay cell {amount_reference}.")
 
         with zipfile.ZipFile(destination, "w") as output_zip:
             for info in input_zip.infolist():

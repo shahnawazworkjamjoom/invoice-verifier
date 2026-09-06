@@ -57,7 +57,7 @@ class DecisionExportTests(unittest.TestCase):
             del original_book, result_book
             gc.collect()
 
-    def test_updates_existing_amount_cell_when_corrected(self):
+    def test_ignores_legacy_amount_correction(self):
         with TemporaryDirectory() as folder:
             source = Path(folder) / "source.xlsx"
             output = Path(folder) / "result.xlsx"
@@ -72,7 +72,7 @@ class DecisionExportTests(unittest.TestCase):
             result_book = load_workbook(output, data_only=False, read_only=True)
             result = list(result_book.active.iter_rows(values_only=True))
             self.assertEqual("APPROVE", result[1][1])
-            self.assertEqual(252.68, result[1][2])
+            self.assertEqual(240.63, result[1][2])
             result_book.close()
 
 
