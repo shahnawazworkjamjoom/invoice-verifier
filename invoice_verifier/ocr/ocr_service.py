@@ -210,7 +210,7 @@ def _ocr_tesseract(img):
         return '', 0.0
 
 
-def _ocr_image(img):
+def _ocr_image(img, amount_only=False):
     # Try the original/upscaled image first. Aggressive thresholding can erase
     # faint dot-matrix invoices (notably the Abu Dhabi Refreshments layout).
     w, h = img.size
@@ -245,7 +245,7 @@ def _ocr_image(img):
     # OCR is otherwise excellent. Re-read that region at higher contrast so
     # invoice dates and numbers remain available to the parser.
     upper = (text or '').upper()
-    if 'INVOICE' in upper and not re.search(r'INVOICE\s*DATE', upper):
+    if not amount_only and 'INVOICE' in upper and not re.search(r'INVOICE\s*DATE', upper):
         from PIL import Image, ImageEnhance
         # Downsampling first suppresses the dot-matrix texture, then enlarging
         # the crop presents clean glyphs to the recognizer.
@@ -264,13 +264,13 @@ def _ocr_image(img):
     return text or '', conf, method
 
 
-def extract_document(file_b64, filename='', doc_type='lpo'):
+def extract_document(file_b64, filename='', doc_type='lpo', amount_only=False):
     """Main entry. Returns dict ready for preview wizard."""
     raw = _decode_file(file_b64)
     full_text, method, confidence = '', 'none', 0.0
 
     if not raw:
-        parsed = ocr_parser.parse_document_text('', doc_type)
+        parsed = ocr_parser.parse_document_text('', doc_type, amount_only=amount_only)
         parsed.update({'ocr_method': 'none', 'ocr_confidence': 0.0})
         return parsed
 
@@ -289,7 +289,7 @@ def extract_document(file_b64, filename='', doc_type='lpo'):
             pages = _pdf_to_images(raw)
             chunks, confs = [], []
             for pg in pages[:10]:
-                tx, cf, md = _ocr_image(pg)
+                tx, cf, md = _ocr_image(pg, amount_only=amount_only)
                 chunks.append(tx)
                 confs.append(cf)
                 method = md
@@ -299,10 +299,10 @@ def extract_document(file_b64, filename='', doc_type='lpo'):
     else:
         img = _load_image(raw)
         if img is not None:
-            full_text, confidence, md = _ocr_image(img)
+            full_text, confidence, md = _ocr_image(img, amount_only=amount_only)
             method = 'ocr-' + md
 
-    parsed = ocr_parser.parse_document_text(full_text or '', doc_type)
+    parsed = ocr_parser.parse_document_text(full_text or '', doc_type, amount_only=amount_only)
     parsed.update({'ocr_method': method, 'ocr_confidence': round(float(confidence or 0.0), 3)})
     return parsed
 

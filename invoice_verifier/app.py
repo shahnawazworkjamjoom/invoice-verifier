@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import os
+import webbrowser
 import queue
 import threading
 import traceback
@@ -9,16 +9,14 @@ from pathlib import Path
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 
-from .downloader import InvoiceDownloader
+from .batch import run_batch
 from .branding import LOGO_PNG_BASE64
 from .corrections import export_decision_workbook
 from .models import InvoiceRecord, VerificationResult
-from .verifier import failed_result, verify_file
 from .workbook import read_records
 
 
 APP_DIR = Path(__file__).resolve().parent.parent
-CACHE_DIR = APP_DIR / "data" / "downloads"
 REPORT_DIR = APP_DIR / "reports"
 
 
@@ -40,6 +38,15 @@ class InvoiceVerifierApp(tk.Tk):
         self._build_style()
         self._build_ui()
         self.after(100, self._drain_events)
+        self.protocol("WM_DELETE_WINDOW", self._close)
+
+    def _close(self):
+        if self.worker and self.worker.is_alive():
+            self.stop_event.set()
+            self.status_label.configure(text="Closing after active work finishes and temporary files are removed...")
+            self.after(100, self._close)
+            return
+        self.destroy()
 
     def _build_style(self):
         style = ttk.Style(self)
@@ -166,25 +173,15 @@ class InvoiceVerifierApp(tk.Tk):
 
     def _work(self, records: list[InvoiceRecord]):
         try:
-            for index, record in enumerate(records, start=1):
-                if self.stop_event.is_set():
-                    break
-                self.events.put((
-                    "status",
-                    f"Processing {index}/{len(records)}: {record.invoice_number} (one invoice at a time)"))
-                try:
-                    path = InvoiceDownloader(CACHE_DIR).download(
-                        record.attachment_url, record.unique_reference or record.invoice_number)
-                    result = verify_file(record, path)
-                except Exception as exc:
-                    result = failed_result(record, str(exc))
-                self.events.put(("result", result, index, len(records)))
+            run_batch(records, self.stop_event, self.events.put)
+        except Exception as exc:
+            self.events.put(("status", f"Batch failed: {exc}"))
         finally:
             self.events.put(("done", self.stop_event.is_set()))
 
     def stop(self):
         self.stop_event.set()
-        self.status_label.configure(text="Stopping after the current invoice...")
+        self.status_label.configure(text="Stopping; waiting for active downloads or OCR to finish and cleaning temporary files...")
 
     def _drain_events(self):
         try:
@@ -245,10 +242,14 @@ class InvoiceVerifierApp(tk.Tk):
         if not selection:
             return
         result = self.results.get(int(selection[0]))
-        if not result or not result.downloaded_file:
-            messagebox.showinfo("Invoice unavailable", "Verify this row first so the invoice is downloaded.")
+        if not result:
+            messagebox.showinfo("Invoice unavailable", "Verify this row first.")
             return
-        os.startfile(result.downloaded_file)
+        url = result.record.attachment_url
+        if not url.lower().startswith(("http://", "https://")):
+            messagebox.showinfo("Invoice unavailable", "This row has no valid invoice URL.")
+            return
+        webbrowser.open(url)
 
     def copy_details(self):
         text = self.details.get("1.0", "end-1c")

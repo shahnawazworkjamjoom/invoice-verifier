@@ -35,28 +35,26 @@ class InvoiceDownloader:
         suffix = Path(parsed_name).suffix.lower()
         key = hashlib.sha256(url.encode("utf-8")).hexdigest()[:12]
         provisional = self.cache_dir / f"{self._safe_name(reference)}_{key}{suffix}"
-        if provisional.exists() and provisional.stat().st_size:
-            return provisional
 
-        response = self.session.get(url, timeout=self.timeout, stream=True)
-        response.raise_for_status()
-        content_type = response.headers.get("Content-Type", "").split(";", 1)[0].strip().lower()
-        if not suffix:
-            suffix = mimetypes.guess_extension(content_type) or ".bin"
-            provisional = provisional.with_suffix(suffix)
-        allowed = {".pdf", ".png", ".jpg", ".jpeg", ".webp", ".tif", ".tiff", ".bmp"}
-        if suffix not in allowed and not (content_type.startswith("image/") or content_type == "application/pdf"):
-            raise ValueError(f"Unsupported attachment type: {content_type or suffix or 'unknown'}")
-        partial = provisional.with_suffix(provisional.suffix + ".part")
-        try:
-            with partial.open("wb") as target:
-                for chunk in response.iter_content(1024 * 128):
-                    if chunk:
-                        target.write(chunk)
-            if not partial.stat().st_size:
-                raise ValueError("Downloaded attachment is empty.")
-            partial.replace(provisional)
-        except Exception:
-            partial.unlink(missing_ok=True)
-            raise
-        return provisional
+        with self.session.get(url, timeout=self.timeout, stream=True) as response:
+            response.raise_for_status()
+            content_type = response.headers.get("Content-Type", "").split(";", 1)[0].strip().lower()
+            if not suffix:
+                suffix = mimetypes.guess_extension(content_type) or ".bin"
+                provisional = provisional.with_suffix(suffix)
+            allowed = {".pdf", ".png", ".jpg", ".jpeg", ".webp", ".tif", ".tiff", ".bmp"}
+            if suffix not in allowed and not (content_type.startswith("image/") or content_type == "application/pdf"):
+                raise ValueError(f"Unsupported attachment type: {content_type or suffix or 'unknown'}")
+            partial = provisional.with_suffix(provisional.suffix + ".part")
+            try:
+                with partial.open("wb") as target:
+                    for chunk in response.iter_content(1024 * 128):
+                        if chunk:
+                            target.write(chunk)
+                if not partial.stat().st_size:
+                    raise ValueError("Downloaded attachment is empty.")
+                partial.replace(provisional)
+            except Exception:
+                partial.unlink(missing_ok=True)
+                raise
+            return provisional

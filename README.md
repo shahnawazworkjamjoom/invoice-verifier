@@ -9,7 +9,11 @@ The application never writes to the uploaded Excel workbook. **Export result** c
 
 ## Performance
 
-Invoices are processed strictly one at a time. The app downloads and verifies one invoice, completes its result, and only then starts the next invoice.
+Each run downloads all selected invoices first, with up to four simultaneous downloads. Files are mapped by Excel row, then OCR verification runs one invoice at a time in row order. A failed download declines only its own row. Stop cancels queued downloads and waits for active work before cleanup.
+
+Downloads live in a temporary batch folder that is deleted after completion, cancellation, or failure. No persistent download or OCR-result cache is used. Each new run downloads and reads invoices again. Open Invoice opens the original attachment URL in your browser.
+
+The verification OCR mode skips date recovery and line-item parsing. It uses the printed final total and does not reconstruct a missing total from subtotal and VAT. PDF handling is unchanged.
 
 ## Local OCR verification
 
@@ -40,6 +44,6 @@ Run with:
 .\run.bat
 ```
 
-Click **Upload Excel**, then **Verify all** or select rows and use **Verify selected**. Downloaded invoices are cached in `data/downloads`; generated reports are saved wherever you choose.
+Click **Upload Excel**, then **Verify all** or select rows and use **Verify selected**. Downloaded invoices are temporary; generated reports are saved wherever you choose.
 
 Export preserves the original workbook structure and amounts, changing only the existing Approver Action cells.

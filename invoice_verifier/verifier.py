@@ -21,7 +21,7 @@ def verify_file(record: InvoiceRecord, path: str | Path) -> VerificationResult:
     source_path = Path(path)
     try:
         encoded = base64.b64encode(source_path.read_bytes())
-        ocr = extract_document(encoded, source_path.name, "invoice")
+        ocr = extract_document(encoded, source_path.name, "invoice", amount_only=True)
     except Exception as exc:
         return failed_result(record, f"OCR failed: {exc}", source_path)
 

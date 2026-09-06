@@ -666,9 +666,9 @@ def extract_lines(text):
     return deduped[:100]
 
 
-def parse_document_text(text, doc_type='lpo'):
+def parse_document_text(text, doc_type='lpo', amount_only=False):
     text = text or ''
-    lines = extract_lines(text)
+    lines = [] if amount_only else extract_lines(text)
     totals = extract_totals(text)
     # Common labels in the purchasing team's real PO and invoice formats.
     strong_untaxed = _labelled_amount(text, [
@@ -692,6 +692,10 @@ def parse_document_text(text, doc_type='lpo'):
         totals['amount_untaxed'] = _parse_amount(mohebi_summary.group(1))
         totals['amount_tax'] = _parse_amount(mohebi_summary.group(2))
         totals['amount_total'] = _parse_amount(mohebi_summary.group(3))
+    if amount_only:
+        # Only a printed total is evidence: do not manufacture a payable amount
+        # from line items, subtotal or tax when the final total is unreadable.
+        return {'amount_total': totals['amount_total'], 'raw_text': text[:20000]}
     totals['discount'] = totals.get('discount') or _labelled_amount(text, [r'Invoice[ \t]*Discount'])
     lines_sum = round(sum(l.get('price_subtotal', 0.0) for l in lines), 2)
     # The Abu Dhabi Refreshments credit invoice prints "Total net amount" as
