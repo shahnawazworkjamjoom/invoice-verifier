@@ -13,7 +13,11 @@ Each run downloads all selected invoices first, with up to four simultaneous dow
 
 Downloads live in a temporary batch folder that is deleted after completion, cancellation, or failure. No persistent download or OCR-result cache is used. Each new run downloads and reads invoices again. Open Invoice opens the original attachment URL in your browser.
 
-The verification OCR mode skips date recovery and line-item parsing. It uses the printed final total and does not reconstruct a missing total from subtotal and VAT. PDF handling is unchanged.
+The dedicated `amount-ocr-v2` reader skips date recovery and line-item parsing. It groups recognized words by their position so final-total labels stay attached to the correct amount. It has layout rules for Barakat Quality Plus, Abu Dhabi Refreshments, Dubai Refreshment, Mohebi Logistics, and M.H. Enterprises, plus common payable-total labels.
+
+Scanned PDFs are read from their visible images even if they contain a faulty hidden text layer. Rendered pages are capped at 2600 pixels on the longest side, and the initial OCR pass uses at most 1800 pixels. A fast pass reads the summary area on every page, including Barakat page 2. If no total is found, the reader examines full pages, rotates sideways scans, and tries contrast and time-limited Tesseract fallback. Clean text PDFs retain direct text extraction. Multiple conflicting final totals decline.
+
+The reader uses existing pretrained PP-OCRv4 weights through RapidOCR, with two ONNX threads per operation. These are extraction and runtime improvements, not neural-network training. It never receives the Excel amount and never reconstructs a missing final total from subtotal, VAT, or line items.
 
 ## Local OCR verification
 
@@ -47,3 +51,7 @@ Run with:
 Click **Upload Excel**, then **Verify all** or select rows and use **Verify selected**. Downloaded invoices are temporary; generated reports are saved wherever you choose.
 
 Export preserves the original workbook structure and amounts, changing only the existing Approver Action cells.
+
+## Evaluation
+
+See [the OCR v2 evaluation](reports/ocr_v2_evaluation.md) for the 78-invoice benchmark, vendor coverage, manually checked cases, and remaining scan limitations.

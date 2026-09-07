@@ -1,0 +1,513 @@
+[
+  {
+    "row": 2,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07863229",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-2_ec4af6be3b63.pdf",
+    "sha256": "d8a45b2a9e1365ab5eb2aa4b0db8cd152a571d8cdfbd455d60263b7203ad3fa9"
+  },
+  {
+    "row": 3,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07852713",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-3_18ecba5fe1ea.pdf",
+    "sha256": "b0bac51f90402c6094c5e5fe3a3c496469ca94d261b41c23411074e906321cd8"
+  },
+  {
+    "row": 4,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07852702",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-4_959d9b5ddbf5.pdf",
+    "sha256": "34ea95188e3e133b062dd754712005a469d6c2a92dc7b5edc3f6a38575025694"
+  },
+  {
+    "row": 5,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07863233",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-5_02d43498d3f8.pdf",
+    "sha256": "c1ac103f44315ccb36ece1ac03c2d9e379cf3c51c7e2f89b0f405d7ca59fae2d"
+  },
+  {
+    "row": 6,
+    "vendor": "ADHABIREF",
+    "invoice": "9026201388",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-6_2180ac20e641.pdf",
+    "sha256": "ecb55c488a6fad4e050ae74040fc92bff43538232e7c029c3f53a77c37c68307"
+  },
+  {
+    "row": 7,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07863106",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-7_3e3754ac4c20.pdf",
+    "sha256": "aff33bdf0ed776d4b0433ea4514f6691c9a431cd07426d00a76aa56e5486adf9"
+  },
+  {
+    "row": 8,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07863085",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-8_aaa7454ce900.pdf",
+    "sha256": "95d64846e2b9f831d7026d524563d1a0652b3bde20ee78e9c85ded226db82ac7"
+  },
+  {
+    "row": 9,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07863237",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-9_15cb89b9dfac.pdf",
+    "sha256": "b36b863cda4f084400f8f30c9a776a395432a7a0b47be7c4195ddf74b3d4d5b4"
+  },
+  {
+    "row": 10,
+    "vendor": "ADHABIREF",
+    "invoice": "8726201500",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-10_4321dcaf2da2.pdf",
+    "sha256": "ac89735a3779e571053153a7377c805039f2b0a80abf2e7501e7b7035c298881"
+  },
+  {
+    "row": 11,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07852732",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-11_0a1fb917be9d.pdf",
+    "sha256": "5a514dbb1eedf4c77ea41e278acd6508d379fca406a70e7e988dec68ce6e18e4"
+  },
+  {
+    "row": 12,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07861498",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-12_2f4551c1a2ed.pdf",
+    "sha256": "fde442becdcadac923f3dc37fb00dbfdc1e73289f9feaa5a76c757f1ddfaad68"
+  },
+  {
+    "row": 13,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07852714",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-13_99a3b17cca1e.pdf",
+    "sha256": "8c931178540477c53a9d420df01116cba7bdd4ad539c9db0fb76759f054fa7ff"
+  },
+  {
+    "row": 14,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07852698",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-14_39fae061ad8d.pdf",
+    "sha256": "e7741bf8b2b4e79b7699d5b1981261b6359731e6c802124316fc07df669a2040"
+  },
+  {
+    "row": 15,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07852730",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-15_1db2ff8051e0.pdf",
+    "sha256": "89f442f3fe9cc981b2a3935a0d5d7c2276112b5cd2e89b0d32ed9bf83b917e05"
+  },
+  {
+    "row": 16,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07852729",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-16_444b041aa1b3.jpeg",
+    "sha256": "4ed01847b90414fd49312fc40529ae018164435725a7894bca288bb831ebf897"
+  },
+  {
+    "row": 17,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07863158",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-17_bda9a4a19538.pdf",
+    "sha256": "21ff65a56ecbfb40a9e5c1eecb9a02a6f6debddb955b775ebf6b902c455ad3da"
+  },
+  {
+    "row": 18,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07848238",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-18_51fc94bc883c.pdf",
+    "sha256": "48aaba8b6ee70d44b3f72a925b7b6d9c5fbf9f11fafeb32ddfc7778facc18992"
+  },
+  {
+    "row": 19,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07848204",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-19_026ac0887925.pdf",
+    "sha256": "5e4c513b27126aaf3ee9cb09077cb93eb956eecc9ed9ced7fa9b03adde697f37"
+  },
+  {
+    "row": 20,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07848205",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-20_d60d59a48b4f.pdf",
+    "sha256": "0d681e680997369ac79efbbd4b68fd6245b2c25dbb3eaeb277a7fcfdab382722"
+  },
+  {
+    "row": 21,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07863148",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-21_60c94511e439.pdf",
+    "sha256": "7e079b24ccf3c86c852681d13b4ba95cdb6a2ad7faf9bc9f5dc76a28a67c5fcc"
+  },
+  {
+    "row": 22,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07850300",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-22_808d7a0870cf.pdf",
+    "sha256": "12e443c6c4002eafa73341dc2cf3867453dfe8f14c0e10a33da016d9e338f64a"
+  },
+  {
+    "row": 23,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07852739",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-23_e2d352754211.pdf",
+    "sha256": "9cc01cf1d8a5979c60c08f4ae469031a70f7d96ef897823137f512540d9f9984"
+  },
+  {
+    "row": 24,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07852742",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-24_1390539e06fb.pdf",
+    "sha256": "d2d10dfe227a550bdb2f478867436ef30e3c9d18a5e51526abe38b1cd40b7693"
+  },
+  {
+    "row": 25,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07852743",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-25_2e2276dd4a89.pdf",
+    "sha256": "103b4d40064d5f6b8798c49b0d7a1d24c43d82ff9c6b20c3cfee52f836ea2a32"
+  },
+  {
+    "row": 26,
+    "vendor": "BARAKAT",
+    "invoice": "1102- SOIN-07863090",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-26_030591e067fb.pdf",
+    "sha256": "9e69b6e85cbbfe84d764a7246a9abf71b0b879b2201f96aedee12ac0b6db0637"
+  },
+  {
+    "row": 27,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07863144",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-27_94433c98a425.pdf",
+    "sha256": "6713b3b880d1b92960daa3925b3086500fb697f92e317a15092324241a98a8cb"
+  },
+  {
+    "row": 28,
+    "vendor": "ADHABIREF",
+    "invoice": "8526201899",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-28_2658a2db1567.pdf",
+    "sha256": "dfd5cbeeab0380c39aa5387c223ad1a6bfbdb93bffac5d38ed3796a8d8722256"
+  },
+  {
+    "row": 29,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07863077",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-29_5a2f7d59c3f2.pdf",
+    "sha256": "003ffabe6e56ed81c6c6c54d4a90ec4a70ab8de83f23184c14724b3d241f2049"
+  },
+  {
+    "row": 30,
+    "vendor": "ADHABIREF",
+    "invoice": "4626201764",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-30_6d544f363912.pdf",
+    "sha256": "6b009cef15877f57d50bc72830326846cf8cf15f4f64d7878985ae0cb8620c1c"
+  },
+  {
+    "row": 31,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07863140",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-31_2bf195a2d402.pdf",
+    "sha256": "df54e2e8464dc7b05c04fa261f1b4f5df6ead25c2cee04271ffd62576f65b117"
+  },
+  {
+    "row": 32,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07852744",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-32_aee01ee78087.pdf",
+    "sha256": "c50924891ab4a82a64dc5069d313cb1950ec9a3d5ed6d79bb3b5d66bc97d8d84"
+  },
+  {
+    "row": 33,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07863174",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-33_0ea8055f4243.pdf",
+    "sha256": "58197a7336b7597ac000676551d6978fbd3ff186f0712e628055db0e80bdf3d6"
+  },
+  {
+    "row": 34,
+    "vendor": "ADHABIREF",
+    "invoice": "2326201353",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-34_87ac9443d44c.pdf",
+    "sha256": "5967836aaeb82df5ecebb9c4004114b77f8bf7fcf1a8ffd0d35d74a9d078799d"
+  },
+  {
+    "row": 35,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07863196",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-35_5eed60d1a704.pdf",
+    "sha256": "e272af771e91fe17d841b34fc2df6c6b1a22c0ba59a5792269b2de8831a9e26d"
+  },
+  {
+    "row": 36,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07848243",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-36_c14822c86d56.pdf",
+    "sha256": "6b26a3d7fa2c4c4b8d342ef51c85183a9eee0578e7592c2bd50c4350131f3d07"
+  },
+  {
+    "row": 37,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07849060",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-37_e2d0f0c41fa3.pdf",
+    "sha256": "28f4cb999999afccb247dca3ffaa213526a38c618470ed8afc4e931e5a435c0f"
+  },
+  {
+    "row": 38,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07849354",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-38_e10d196fe466.pdf",
+    "sha256": "a952ecce48331adb8ac70f331eaf06d2fdf3375c94d43fe274c16d9fc17d2d38"
+  },
+  {
+    "row": 39,
+    "vendor": "ADHABIREF",
+    "invoice": "2326201340",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-39_98cced5f5079.pdf",
+    "sha256": "4aa11c03b6b4f252dd0bdaa37f48bd84b6cb7de2f43eace3f6757e9514711837"
+  },
+  {
+    "row": 40,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07848236",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-40_1c05da2d0e33.pdf",
+    "sha256": "5b3fd090d34e192e8baaf5fb90a0a45ca3c1cef42b5046cded0b69b4da33f9a7"
+  },
+  {
+    "row": 41,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07849043",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-41_fcf88408b438.pdf",
+    "sha256": "3c95db9ce8547a62162fd696eaca4e26e2e8068f56becebde004d293925d7c08"
+  },
+  {
+    "row": 42,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07848154",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-42_4ecd8b9b7264.pdf",
+    "sha256": "b533133677ecb0e81f881de342960a7920ef21226b1205f7edb9956d60696477"
+  },
+  {
+    "row": 43,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07848190",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-43_74ef6e843784.pdf",
+    "sha256": "e9a44813563e94cb2b90c0997040e98738292bee007f261420c68133bca49c1b"
+  },
+  {
+    "row": 44,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07848242",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-44_6ae0c213ee93.pdf",
+    "sha256": "d91e23b565726543c7fe206da5586851b0c972557de1e2b108ef12f33d8fa2b7"
+  },
+  {
+    "row": 45,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07863078",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-45_3ae201978219.pdf",
+    "sha256": "ef8997165b4d0e085df0a010cd01909d4a83aca68420ac8791bd07acbba20743"
+  },
+  {
+    "row": 46,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07852738",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-46_99fd20949c27.pdf",
+    "sha256": "58ee68212936cfaee2c0abc6de2b2cba093b78a6aeb37864ab2d07cacf2803b9"
+  },
+  {
+    "row": 47,
+    "vendor": "ADHABIREF",
+    "invoice": "7426201625",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-47_9851661809e6.pdf",
+    "sha256": "d54c2b3f2a7d9b0075ebc25747c8314b481cf50dde1baa89695a1aded3dcaca0"
+  },
+  {
+    "row": 48,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07863197",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-48_b26a2dcda433.pdf",
+    "sha256": "4fe222186198d1c162230ed1e7e3c28cb7dc34e371082224dee7cae39c99eb72"
+  },
+  {
+    "row": 49,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07852735",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-49_ebbc455b80ee.pdf",
+    "sha256": "318c8ffef9280b1b5b2873bfefe3fdf8398829cfd2ce9cce9d7019cebd6f8ce4"
+  },
+  {
+    "row": 50,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07848221",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-50_36fdfd39f23c.pdf",
+    "sha256": "87bb4a71dcea568eecf221c218e5f949dc1a5ae081f1391ae119f24dd189bb91"
+  },
+  {
+    "row": 51,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07849002",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-51_162fc57ee645.pdf",
+    "sha256": "c26721d3a17bdfbdd2215a562e83c1d84e8adefd70d54f8ec43a2476e39a04ca"
+  },
+  {
+    "row": 52,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07852741",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-52_90218fca5f4c.pdf",
+    "sha256": "4a114cc3ab81edee3585ce1d6e7c3f2c331a340e658c678be9ddaf0d201d7aa7"
+  },
+  {
+    "row": 53,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07863092",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-53_654ed1ff0410.pdf",
+    "sha256": "b9414632e3c7e014838cea5e29caaee41d97fda411bcf2d616c9cbc5c3860c24"
+  },
+  {
+    "row": 54,
+    "vendor": "ADHABIREF",
+    "invoice": "22226202427",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-54_2158bd901fd8.pdf",
+    "sha256": "c9db76fa9e92965d2b44f08dfcdba3a81e0c5d759f9155e0cd389489be977a8c"
+  },
+  {
+    "row": 55,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07863122",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-55_9a83b02e6cb4.pdf",
+    "sha256": "48eaeb0f12cef61983dd7b3cf9454fc4490aa5475f115ec2ac7df114505857e4"
+  },
+  {
+    "row": 56,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07863061",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-56_49318c0ac47e.pdf",
+    "sha256": "dc6c249fa5b2783f7eae0b8a743274749f85f094e5fd9e6372deac2c1b70d42d"
+  },
+  {
+    "row": 57,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07863191",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-57_2a3bc96d9239.pdf",
+    "sha256": "26f69b503f63d6f64347d9be75f735f9d2ab6c63b47c66269514b1b37273578f"
+  },
+  {
+    "row": 58,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07849062",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-58_06f811c8a4dc.pdf",
+    "sha256": "9e5fa48cbd3acc79763744804cd2f391b1331cbf94fa9b552e24df69dd6cf947"
+  },
+  {
+    "row": 59,
+    "vendor": "ADHABIREF",
+    "invoice": "6426201476",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-59_7cc64868b0a3.pdf",
+    "sha256": "800a34c5789a0347175985f6ad1182691dc0428b3542a58537fffa6832c37b94"
+  },
+  {
+    "row": 60,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07848169",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-60_18a6894a8972.pdf",
+    "sha256": "1d382769ac1eb7fe9a47e3b91ffce952f7d5dfc08c7cb812effcc7320ed8c4bd"
+  },
+  {
+    "row": 61,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07863070",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-61_907ba9494b1e.pdf",
+    "sha256": "cbe8f93111626def775f73ebdf3291763107790aa84f85c48b4f92a726c78991"
+  },
+  {
+    "row": 62,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07848159",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-62_ab077daf7e47.pdf",
+    "sha256": "6400d3315befcfeb7d5e77aaeaf05bf15dab692aed935e4d59b68d2e4d87d97d"
+  },
+  {
+    "row": 63,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07852692",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-63_4e778adce741.pdf",
+    "sha256": "e0c8434d62bf0f7b35990069f46934dbaca15632a50841eb3afaedd7e575d19a"
+  },
+  {
+    "row": 64,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07852691",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-64_e47695f6ab52.pdf",
+    "sha256": "78addafee849ea4ba2c441608d7882114f6e22fb52715ea530ffe59013d7ec3c"
+  },
+  {
+    "row": 65,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07863176",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-65_8ec191508ea3.pdf",
+    "sha256": "3612a7c83a25b970cb5f2b8fed010b7aa4d3deaec8e28a52f4cd180db142a13c"
+  },
+  {
+    "row": 66,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07863087",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-66_73f33cdb3d92.pdf",
+    "sha256": "8e35a643a546f85b4c2d7fa01c6858353f8b15eb9a18f84e0295b983728b1f09"
+  },
+  {
+    "row": 67,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07844254",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-67_139b90907102.pdf",
+    "sha256": "6100a29b7ac820d03410ec0b4a574d9836bc1057ecf89ad3be439f136cb28182"
+  },
+  {
+    "row": 68,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07845813",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-68_fae949c8c6eb.pdf",
+    "sha256": "a0cf258c087ce5b4cbe8c919d2b764f70013b2f93626a79f933bd8ccdd49d969"
+  },
+  {
+    "row": 69,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07845795",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-69_93b0d6299dfa.pdf",
+    "sha256": "e932f26108bf863c3ca31ad04fc5d6767d8519aa141655b3aebc33d2e0b45fb5"
+  },
+  {
+    "row": 70,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07863118",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-70_7a9dc5cf281a.pdf",
+    "sha256": "e14a36e121ac9292c24f63c995378b09ab8cb0d20fb211f7e0c489ad642056c8"
+  },
+  {
+    "row": 71,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07848180",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-71_b6047c529d93.pdf",
+    "sha256": "64e9f52b5f77fd34cb84f8c878359b462764e844d578146fbee92fd42b3fcb2a"
+  },
+  {
+    "row": 72,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07840041",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-72_87d2751bd968.png",
+    "sha256": "72dc99ab073748654ed23687e24ac358178ca69d2f199e322050a4b2df2487da"
+  },
+  {
+    "row": 73,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07840061",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-73_def25be50172.pdf",
+    "sha256": "4d94017bfa8ec5a16bb052057c9f0b13d26218f7c60f8b3e88e9be8580241950"
+  },
+  {
+    "row": 74,
+    "vendor": "BARAKAT",
+    "invoice": "1102-SOIN-07852697",
+    "path": "D:\\MyData\\OneDrive - Kamal Osman Jamjoom Group LLC\\Desktop\\invoice verifier\\tmp\\ocr_assessment\\invoices\\row-74_f95e07e03e2e.pdf",
+    "sha256": "3da23c5b0e5fc9ebe62d4684de99db42ffaf032c0444fd57d89947fd48ce90bd"
+  }
+]

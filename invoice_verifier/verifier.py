@@ -33,6 +33,10 @@ def verify_file(record: InvoiceRecord, path: str | Path) -> VerificationResult:
         "Final Amount Due": str(final_amount) if final_amount is not None else "not found",
         "Finance Amount To Pay": str(expected_amount) if expected_amount is not None else "missing or invalid",
     }
+    if ocr.get("vendor_name") not in (None, "", "Unknown"):
+        checks["Invoice Vendor"] = ocr["vendor_name"]
+    if ocr.get("amount_evidence"):
+        checks["Amount Evidence"] = ocr["amount_evidence"]
     if final_amount is None:
         decision = "DECLINE"
         remarks = "OCR could not find a valid final amount due"

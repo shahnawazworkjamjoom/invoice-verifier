@@ -181,14 +181,14 @@ def _reading_order_score(text):
     return score
 
 
-def _ocr_tesseract(img):
+def _ocr_tesseract(img, timeout=0):
     try:
         import pytesseract
         # allow explicit binary path via env (Windows default install)
         custom_bin = os.environ.get('TESSERACT_CMD')
         if custom_bin:
             pytesseract.pytesseract.tesseract_cmd = custom_bin
-        data = pytesseract.image_to_data(img, output_type=pytesseract.Output.DICT, config='--psm 6')
+        data = pytesseract.image_to_data(img, output_type=pytesseract.Output.DICT, config='--psm 6', timeout=timeout)
         words = []
         confs = []
         for i, w in enumerate(data.get('text', [])):
@@ -202,7 +202,7 @@ def _ocr_tesseract(img):
                     confs.append(c)
             except Exception:
                 pass
-        text = pytesseract.image_to_string(img, config='--psm 6')
+        text = pytesseract.image_to_string(img, config='--psm 6', timeout=timeout)
         avg = (sum(confs) / len(confs) / 100.0) if confs else 0.0
         return text or ' '.join(words), avg
     except Exception as e:
@@ -265,7 +265,10 @@ def _ocr_image(img, amount_only=False):
 
 
 def extract_document(file_b64, filename='', doc_type='lpo', amount_only=False):
-    """Main entry. Returns dict ready for preview wizard."""
+    """Read documents; invoice verification uses the dedicated v2 amount reader."""
+    if amount_only:
+        from .amount_reader import extract_amount
+        return extract_amount(_decode_file(file_b64), filename)
     raw = _decode_file(file_b64)
     full_text, method, confidence = '', 'none', 0.0
 
