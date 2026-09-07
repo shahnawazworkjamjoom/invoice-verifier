@@ -1,0 +1,50 @@
+{
+  "app": "KOJ Invoice Verifier",
+  "purpose": "Long-term audit: why the system took each APPROVE/DECLINE decision.",
+  "source_name": "PurchaseOrderAttachment-09072026-0759AM.xlsx",
+  "source_path": "D:\\MyData\\Downloads\\PurchaseOrderAttachment-09072026-0759AM.xlsx",
+  "run_started_at": "2026-09-07T10:16:53",
+  "saved_at": "2026-09-07T10:17:22",
+  "total": 1,
+  "approve": 1,
+  "decline": 0,
+  "results": [
+    {
+      "excel_row": 2,
+      "supplier": "BARAKAT",
+      "brand": "Subway",
+      "location": "11500136-ADNOC 655 AL YARMOUK",
+      "order_number": "PO202609-76707",
+      "invoice_number": "1102-SOIN-07872065",
+      "currency": "AED",
+      "po_amount": 15.0,
+      "invoice_date": "07-Sep-2026",
+      "attachment_url": "https://finance.servicekojfood.com/Resources/DMSFiles/Subway/Subway_PO202609-76707_INV1102-SOIN-07872065.pdf",
+      "unique_reference": "Subway_PO202609-76707_INV1102-SOIN-07872065",
+      "record_id": "495518",
+      "payment_status": "FULL",
+      "amount_to_pay": 15.75,
+      "received_qty": 1.0,
+      "tax_code": "UAE_VAT_INC_5%",
+      "decision": "APPROVE",
+      "remarks": "Invoice final amount exactly matches Excel Finance Amount To Pay",
+      "checks": {
+        "Local OCR": "used (amount-ocr-v3-summary); NVIDIA Vision on hold",
+        "Final Amount Due": "15.75",
+        "Finance Amount To Pay": "15.75",
+        "Invoice Vendor": "Barakat Quality Plus",
+        "Amount Evidence": "Total amount due:  15.75",
+        "Manual Override": "Changed from DECLINE to APPROVE by user"
+      },
+      "manual_override": "Changed from DECLINE to APPROVE by user",
+      "ocr_summary": {
+        "amount_total": "15.75",
+        "vendor_name": "Barakat Quality Plus",
+        "amount_evidence": "Total amount due:  15.75",
+        "ocr_method": "amount-ocr-v3-summary"
+      },
+      "source_file": "PurchaseOrderAttachment-09072026-0759AM.xlsx",
+      "audited_at": "2026-09-07T10:17:22"
+    }
+  ]
+}
