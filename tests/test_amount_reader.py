@@ -178,6 +178,19 @@ class AmountReaderTests(unittest.TestCase):
         boxes.append([[[502,340],[566,340],[566,360],[502,360]],'88.88',.99])
         self.assertIsNone(select_total(spatial_text(boxes))['amount_total'])
 
-    def test_dubai_realignment_requires_vendor(self):
+    def test_dubai_misread_header_still_realigns(self):
+        # Thermal photos often OCR 'DUBAI' as 'DUBRI'; the 5-label layout
+        # plus PEPSIDRC/CREDIT markers must still identify the vendor.
         boxes = self.dubai_skewed_summary()[:-1]
+        vendor_boxes = [[[[0,10],[200,10],[200,30],[0,30]], 'DUBRI REFRESHMENT (PJSC)', .9],
+                        [[[0,35],[200,35],[200,55],[0,55]], 'E-mail:callcenter@pepsidrc.ae', .9]]
+        self.assertEqual('77.49', select_total(spatial_text(boxes + vendor_boxes))['amount_total'])
+
+    def test_dubai_realignment_requires_vendor(self):
+        # No header at all and no Dubai markers: must not realign.
+        boxes = [b for b in self.dubai_skewed_summary()
+                 if b[1] not in ('TOTALVALUEBEFORETAX', 'EXCISETAX',
+                                 'NETVALUEBEFOREVAT(AED)', 'VAT(AED)',
+                                 'TOTAL/GROSS(AED)',
+                                 'OFFICIAL DUBAI REFRESHMENT PJSC RECEIPT')]
         self.assertIsNone(select_total(spatial_text(boxes))['amount_total'])

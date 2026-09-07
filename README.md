@@ -17,7 +17,7 @@ The dedicated `amount-ocr-v2` reader skips date recovery and line-item parsing. 
 
 Scanned PDFs are read from their visible images even if they contain a faulty hidden text layer. Rendered pages are capped at 2600 pixels on the longest side, and the initial OCR pass uses at most 1800 pixels. A fast pass reads the summary area on every page, including Barakat page 2. If no total is found, the reader examines full pages, rotates sideways scans, and tries contrast and time-limited Tesseract fallback. Clean text PDFs retain direct text extraction. Multiple conflicting final totals decline.
 
-The reader uses existing pretrained PP-OCRv4 weights through RapidOCR, with two ONNX threads per operation. These are extraction and runtime improvements, not neural-network training. It never receives the Excel amount and never reconstructs a missing final total from subtotal, VAT, or line items.
+The reader uses existing pretrained weights through RapidOCR 3.x (English det PP-OCRv4 mobile + English rec PP-OCRv5 mobile, receipt-tuned detection, legacy 1.4.4 fallback), with two ONNX threads per operation. These are extraction and runtime improvements, not neural-network training. It never receives the Excel amount and never reconstructs a missing final total from subtotal, VAT, or line items.
 
 ## Local OCR verification
 

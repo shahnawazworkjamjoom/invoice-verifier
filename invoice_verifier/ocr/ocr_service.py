@@ -126,19 +126,48 @@ def _preprocess_pil(img):
         return img
 
 
+def _build_rapidocr_engine():
+    """Prefer rapidocr 3.x (en PP-OCRv5 mobile); fall back to 1.4.4 legacy."""
+    try:
+        from rapidocr import EngineType, LangDet, LangRec, ModelType, OCRVersion, RapidOCR
+        engine = RapidOCR(params={
+            "Det.engine_type": EngineType.ONNXRUNTIME,
+            "Det.lang_type": LangDet.EN,
+            "Det.model_type": ModelType.MOBILE,
+            "Det.ocr_version": OCRVersion.PPOCRV4,
+            "Det.box_thresh": 0.4,
+            "Det.thresh": 0.25,
+            "Det.limit_side_len": 960,
+            "Det.unclip_ratio": 1.8,
+            "Rec.engine_type": EngineType.ONNXRUNTIME,
+            "Rec.lang_type": LangRec.EN,
+            "Rec.model_type": ModelType.MOBILE,
+            "Rec.ocr_version": OCRVersion.PPOCRV5,
+        })
+        return engine, "v3"
+    except Exception:
+        from rapidocr_onnxruntime import RapidOCR as LegacyRapidOCR
+        return LegacyRapidOCR(), "legacy"
+
+
 def _ocr_rapidocr(img):
     global _rapidocr_engine
     try:
-        from rapidocr_onnxruntime import RapidOCR
         import numpy as np
         # Model creation is expensive and does not improve accuracy when
         # repeated. Reuse the same immutable model weights for every page.
         if _rapidocr_engine is None:
             with _rapidocr_lock:
                 if _rapidocr_engine is None:
-                    _rapidocr_engine = RapidOCR()
-        engine = _rapidocr_engine
-        result, _ = engine(np.array(img))
+                    _rapidocr_engine = _build_rapidocr_engine()
+        engine, kind = _rapidocr_engine
+        if kind == "v3":
+            out = engine(np.array(img))
+            has_boxes = out.boxes is not None and len(out.boxes) > 0
+            result = ([[b, t, s] for b, t, s in zip(out.boxes, out.txts, out.scores)]
+                      if has_boxes else None)
+        else:
+            result, _ = engine(np.array(img))
         if not result:
             return '', 0.0, False
         texts, confs, vertical_boxes = [], [], 0

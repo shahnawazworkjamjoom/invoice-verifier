@@ -1,7 +1,9 @@
-"""Invoice amount OCR v2: spatial totals, bounded CPU work, no result cache.
+"""Invoice amount OCR v3: spatial totals, bounded CPU work, no result cache.
 
 Vendor rules select printed totals. They never receive Excel payment amounts.
-Model weights are pretrained PP-OCRv4; this module does not train a model.
+Model weights are pretrained (rapidocr 3.x: en det PP-OCRv4 mobile +
+en rec PP-OCRv5 mobile, legacy 1.4.4 fallback); this module does not
+train a model.
 """
 from __future__ import annotations
 
@@ -9,10 +11,109 @@ import re
 import threading
 from decimal import Decimal
 
-VERSION = "amount-ocr-v2"
+VERSION = "amount-ocr-v3"
 _engine = None
 _engine_lock = threading.Lock()
+_ENGINE_KIND = None
+
+
+def _build_engine():
+    """Prefer rapidocr 3.x (en PP-OCRv5 mobile, receipt-tuned detection).
+
+    Falls back to legacy rapidocr-onnxruntime 1.4.4 when the new package
+    is unavailable. Returns (engine, kind) where kind is 'v3' or 'legacy'.
+    """
+    global _ENGINE_KIND
+    try:
+        from rapidocr import EngineType, LangDet, LangRec, ModelType, OCRVersion, RapidOCR
+        engine = RapidOCR(params={
+            "Det.engine_type": EngineType.ONNXRUNTIME,
+            "Det.lang_type": LangDet.EN,
+            "Det.model_type": ModelType.MOBILE,
+            "Det.ocr_version": OCRVersion.PPOCRV4,
+            # Faint thermal/dot-matrix print needs higher recall.
+            "Det.box_thresh": 0.4,
+            "Det.thresh": 0.25,
+            "Det.limit_side_len": 960,
+            "Det.unclip_ratio": 1.8,
+            "Rec.engine_type": EngineType.ONNXRUNTIME,
+            "Rec.lang_type": LangRec.EN,
+            "Rec.model_type": ModelType.MOBILE,
+            "Rec.ocr_version": OCRVersion.PPOCRV5,
+        })
+        _ENGINE_KIND = "v3"
+        return engine
+    except Exception:
+        from rapidocr_onnxruntime import RapidOCR as LegacyRapidOCR
+        _ENGINE_KIND = "legacy"
+        return LegacyRapidOCR(intra_op_num_threads=2, inter_op_num_threads=1)
 MONEY = r"(?<![\d.,+\-])(?:\d{1,3}(?:,\d{3})+|\d+)\.\d{2}(?![\d.,%])"
+
+
+def _normalize_amount_line(line):
+    """Fix common thermal/scan merges without touching true digits.
+
+    - '230.185%' -> '230.18 5%' (net amount glued to VAT rate).
+    - '928 31' on a total line -> '928.31' (dot lost to blur).
+    - '115,44' -> '115.44' (comma read as decimal separator).
+    Only applied to the working copy used for number search.
+    Space/comma fixes run only when no standard dotted amount is
+    already present, so '16 74' across two valid amounts is never
+    rewritten into '16.74'.
+    """
+    fixed = re.sub(r"(\d+\.\d{2})(5\s?%)(?![\d])", r"\1 \2", line)
+    fixed = re.sub(r"(\d+\.\d{2})(\d\s?%)(?![\d])", r"\1 \2", fixed)
+    if re.search(MONEY, fixed):
+        return fixed
+    if re.search(r"TOTAL|GROSS|NET|VAT|AMOUNT|DUE|PAYABLE", fixed.upper()):
+        fixed = re.sub(r"(?<![\d.])(\d{2,4})[ \t]+(\d{2})(?![\d.])", r"\1.\2", fixed)
+        if not re.search(MONEY, fixed):
+            fixed = re.sub(r"(?<!\d)(\d{1,4}),(\d{2})(?!\d)", r"\1.\2", fixed)
+    return fixed
+
+
+def _clean_amount_token(token):
+    """Normalize one OCR box value to dotted decimals for Dubai columns."""
+    value = (token or "").strip().strip("|lI:;")
+    if re.fullmatch(r"\d{2,4}[ \t]+\d{2}", value):
+        value = re.sub(r"[ \t]+", ".", value)
+    if re.fullmatch(r"\d{1,4},\d{2}", value):
+        value = value.replace(",", ".")
+    match = re.search(MONEY, value)
+    return match.group(0) if match else None
+
+
+def _fuzzy_label(entries, canonical, used):
+    """Match one Dubai summary label allowing 1-2 OCR letter errors."""
+    best, best_score = None, 0
+    second = 0
+    try:
+        from rapidfuzz import fuzz as _fuzz
+
+        def _score(a, b):
+            return _fuzz.ratio(a, b)
+    except Exception:
+        import difflib as _difflib
+
+        def _score(a, b):
+            return _difflib.SequenceMatcher(None, a, b).ratio() * 100
+    for entry in entries:
+        if id(entry) in used:
+            continue
+        compact = re.sub(r"[^A-Z]", "", entry[4].upper())
+        # Exact matches and common single-letter confusions win immediately.
+        normalized = compact.replace("0", "O").replace("1", "I").replace("5", "S")
+        target = canonical.replace("0", "O").replace("1", "I").replace("5", "S")
+        if compact == canonical or normalized == target:
+            return entry, 100
+        score = _score(compact, canonical)
+        if score > best_score:
+            second, best, best_score = best_score, entry, score
+        elif score > second:
+            second = score
+    if best is not None and best_score >= 88 and (best_score - second) >= 3:
+        return best, best_score
+    return None, 0
 
 
 def vendor_name(text):
@@ -20,11 +121,35 @@ def vendor_name(text):
     for marker, name in (("BARAKAT", "Barakat Quality Plus"),
                          ("ABUDHABIREFRESHMENTS", "Abu Dhabi Refreshments"),
                          ("DUBAIREFRESHMENT", "Dubai Refreshment"),
+                         ("DUBRIREFRESHMENT", "Dubai Refreshment"),
+                         ("DUBAREFRESHMENT", "Dubai Refreshment"),
                          ("MOHEBI", "Mohebi Logistics"),
                          ("MHENTERPRISES", "M.H. Enterprises")):
         if marker in compact:
             return name
+    # Thermal receipts often misread DUBAI as DUBRI; fall back to layout markers.
+    if "REFRESHMENT" in compact and ("PEPSIDRC" in compact or "CREDITINVOICENO" in compact):
+        return "Dubai Refreshment"
+    if "PEPSIDRC" in compact and "TAXINVOICE" in compact:
+        return "Dubai Refreshment"
     return "Unknown"
+
+
+def _looks_like_dubai(text, entries=None):
+    """Dubai thermal layout even when the header is misread (DUBRI)."""
+    if vendor_name(text) == "Dubai Refreshment":
+        return True
+    compact = re.sub(r"[^A-Z]", "", text.upper())
+    markers = ("TOTALVALUEBEFORETAX", "EXCISETAX", "NETVALUEBEFOREVAT", "TOTALGROSS")
+    hits = sum(1 for marker in markers if marker in compact)
+    if hits >= 3:
+        return True
+    if entries is not None:
+        joined = " ".join(re.sub(r"[^A-Z]", "", str(value).upper()) for _, _, _, _, value in
+                          [(e[0], e[1], e[2], e[3], e[4]) for e in entries])
+        if sum(1 for marker in markers if marker in joined) >= 3:
+            return True
+    return False
 
 
 def select_total(text):
@@ -35,7 +160,8 @@ def select_total(text):
                                   ("TOTALSALESAMOUNT", "INVOICEDISCOUNT", "TOTALNETAMOUNT")):
         vendor = "Abu Dhabi Refreshments"
     candidates = []
-    for line in text.splitlines():
+    lines = text.splitlines()
+    for index, line in enumerate(lines):
         compact = re.sub(r"[ \t:()/_-]", "", line.upper())
         # Normalize common letter confusions in labels only, never in digits.
         compact = compact.replace("TOLAL", "TOTAL").replace("T0TAL", "TOTAL")
@@ -55,22 +181,31 @@ def select_total(text):
             rank = 2
         if not rank:
             continue
-        numbers = re.findall(MONEY, line)
-        if not numbers:
-            continue
+        numbers = re.findall(MONEY, _normalize_amount_line(line))
+        evidence = line.strip()
         # A table summary must contain several amounts, unlike a plain label.
         table_summary = ((vendor == "Mohebi Logistics" and "TOTALDIRHAMS" in compact)
                          or (vendor == "M.H. Enterprises" and "TOTALAMOUNT" in compact
                              and "DUE" not in compact))
+        if table_summary and len(numbers) < 3 and index + 1 < len(lines):
+            # Wrapped footer: 'Total Dirhams ... Sixty-Four' on one row and
+            # '27.000 3,537.75 176.89 3,714.64' on the next. Joining is safe
+            # here because the net+tax==gross arithmetic check below must pass.
+            combined = line + "  " + lines[index + 1]
+            combined_numbers = re.findall(MONEY, _normalize_amount_line(combined))
+            if len(combined_numbers) >= 3:
+                numbers, evidence = combined_numbers, combined.strip()
+        if not numbers:
+            continue
         if table_summary and len(numbers) < 3:
             continue
         if table_summary:
             net, tax, gross = [Decimal(n.replace(",", "")) for n in numbers[-3:]]
-            if net + tax != gross:
+            if abs((net + tax) - gross) > Decimal("0.01"):
                 continue
         value = Decimal(numbers[-1].replace(",", ""))
         if value > 0:
-            candidates.append((rank, value, line.strip()))
+            candidates.append((rank, value, evidence))
     if not candidates:
         return {"amount_total": None, "vendor_name": vendor, "amount_evidence": "No explicit final total found"}
     rank = max(c[0] for c in candidates)
@@ -105,7 +240,11 @@ def _dubai_summary_total(boxes, text):
     consistent vertical displacement. Never fill a missing total from an item
     row, a subtotal, or arithmetic.
     """
-    if vendor_name(text) != "Dubai Refreshment":
+    entries_early = []
+    for box, value, *_ in boxes:
+        xs, ys = [float(p[0]) for p in box], [float(p[1]) for p in box]
+        entries_early.append((min(xs), max(xs), sum(ys)/4, max(ys)-min(ys), str(value)))
+    if not _looks_like_dubai(text, entries_early):
         return None
     labels = ("TOTALVALUEBEFORETAX", "EXCISETAX", "NETVALUEBEFOREVATAED",
               "VATAED", "TOTALGROSSAED")
@@ -114,22 +253,28 @@ def _dubai_summary_total(boxes, text):
         xs, ys = [float(p[0]) for p in box], [float(p[1]) for p in box]
         entries.append((min(xs), max(xs), sum(ys)/4, max(ys)-min(ys), str(value)))
     matched = []
+    used = set()
     for label in labels:
-        found = [e for e in entries if re.sub(r"[^A-Z]", "", e[4].upper()) == label]
-        if len(found) != 1:
+        found, _ = _fuzzy_label(entries, label, used)
+        if found is None:
             return None
-        matched.append(found[0])
+        used.add(id(found))
+        matched.append(found)
     if any(a[2] >= b[2] for a, b in zip(matched, matched[1:])):
         return None
     height = max(e[3] for e in matched)
     right = max(e[1] for e in matched)
-    amounts = sorted((e for e in entries if e[0] > right
-                      and matched[0][2]-height*1.5 <= e[2] <= matched[-1][2]+height*.5
-                      and re.fullmatch(MONEY, e[4].strip())), key=lambda e: e[2])
+    cleaned = []
+    for entry in entries:
+        if entry[0] > right and matched[0][2]-height*2.0 <= entry[2] <= matched[-1][2]+height*.8:
+            amount = _clean_amount_token(entry[4])
+            if amount:
+                cleaned.append((entry[0], entry[1], entry[2], entry[3], amount))
+    amounts = sorted(cleaned, key=lambda e: e[2])
     if len(amounts) != len(labels):
         return None
     offsets = [a[2]-label[2] for a, label in zip(amounts, matched)]
-    if max(abs(d) for d in offsets) > height*1.5 or max(offsets)-min(offsets) > height*.65:
+    if max(abs(d) for d in offsets) > height*2.0 or max(offsets)-min(offsets) > height*1.0:
         return None
     return "TOTAL/GROSS(AED)  " + amounts[-1][4].strip()
 
@@ -137,12 +282,22 @@ def _dubai_summary_total(boxes, text):
 def _recognize(image):
     global _engine
     import numpy as np
-    from rapidocr_onnxruntime import RapidOCR
     # Serial inference avoids concurrent use of the mutable RapidOCR pipeline.
     with _engine_lock:
         if _engine is None:
-            _engine = RapidOCR(intra_op_num_threads=2, inter_op_num_threads=1)
-        boxes, _ = _engine(np.asarray(image))
+            _engine = _build_engine()
+        engine, kind = _engine, _ENGINE_KIND
+        if kind == "v3":
+            out = engine(np.asarray(image))
+            boxes, txts, scores = out.boxes, out.txts, out.scores
+            if boxes is None or len(boxes) == 0:
+                return []
+            adapted = []
+            for box, text, conf in zip(boxes, txts, scores):
+                pts = [[float(v) for v in pt] for pt in box]
+                adapted.append([pts, str(text), float(conf)])
+            return adapted
+        boxes, _ = engine(np.asarray(image))
     return boxes or []
 
 
@@ -156,6 +311,41 @@ def _sideways(boxes):
                (max(p[0] for p in b[0])-min(p[0] for p in b[0]))*1.5
                for b in boxes if len(str(b[1])) > 3)
     return count > len(boxes)*.35 or tall > len(boxes)*.25
+
+
+def _remove_blue_ink(image):
+    """Suppress blue ballpoint ticks/signatures that cover thermal print."""
+    try:
+        import cv2
+        import numpy as np
+        from PIL import Image as _Image
+        arr = np.asarray(image.convert("RGB"))
+        hsv = cv2.cvtColor(arr, cv2.COLOR_RGB2HSV)
+        # Blue pen: H ~90-130, moderate saturation/value.
+        mask = cv2.inRange(hsv, np.array([85, 60, 40]), np.array([135, 255, 255]))
+        mask = cv2.dilate(mask, np.ones((3, 3), np.uint8), iterations=1)
+        cleaned = arr.copy()
+        cleaned[mask > 0] = (255, 255, 255)
+        return _Image.fromarray(cleaned)
+    except Exception:
+        return image
+
+
+def _enhance_thermal(image):
+    """High-contrast variant for faint thermal/dot-matrix receipts."""
+    try:
+        import cv2
+        import numpy as np
+        from PIL import Image as _Image
+        arr = np.asarray(image.convert("RGB"))
+        gray = cv2.cvtColor(arr, cv2.COLOR_RGB2GRAY)
+        gray = cv2.bilateralFilter(gray, 5, 50, 50)
+        clahe = cv2.createCLAHE(clipLimit=2.5, tileGridSize=(8, 8))
+        enhanced = clahe.apply(gray)
+        _, binary = cv2.threshold(enhanced, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        return _Image.fromarray(binary).convert("RGB")
+    except Exception:
+        return image
 
 
 def read_image(image):
@@ -182,14 +372,30 @@ def read_image(image):
     else:
         text = spatial_text(boxes)
         parsed = select_total(text)
+    if parsed["amount_total"] is None and "Conflicting" not in parsed["amount_evidence"]:
+        # Upside-down phone scans (e.g. MH page 2 of 2) are not sideways;
+        # their glyphs are inverted, so OCR returns short garbage text.
+        # Try 180 degrees once and keep it only when it yields a total.
+        upside = preview.rotate(180, expand=True)
+        found = _recognize(upside)
+        upside_text = spatial_text(found)
+        upside_parsed = select_total(upside_text)
+        if upside_parsed["amount_total"] is not None:
+            boxes, text, parsed = found, upside_text, upside_parsed
+            image = image.rotate(180, expand=True)
     # Retry only when the actual target is missing, not because unrelated text is short.
     if parsed["amount_total"] is None and "Conflicting" not in parsed["amount_evidence"] and not _sideways(boxes):
         from .ocr_service import _preprocess_pil
-        retry = _recognize(_preprocess_pil(image))
-        retry_text = spatial_text(retry)
-        retry_parsed = select_total(retry_text)
-        if retry_parsed["amount_total"] is not None:
-            boxes, text, parsed = retry, retry_text, retry_parsed
+        for variant in (_preprocess_pil(image), _enhance_thermal(image), _remove_blue_ink(image)):
+            try:
+                retry = _recognize(variant)
+            except Exception:
+                continue
+            retry_text = spatial_text(retry)
+            retry_parsed = select_total(retry_text)
+            if retry_parsed["amount_total"] is not None:
+                boxes, text, parsed = retry, retry_text, retry_parsed
+                break
     if parsed["amount_total"] is None and "Conflicting" not in parsed["amount_evidence"]:
         from .ocr_service import _ocr_tesseract
         fallback_text, fallback_confidence = _ocr_tesseract(image, timeout=5)
